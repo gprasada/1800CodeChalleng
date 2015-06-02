@@ -1,6 +1,7 @@
-package com.aconex.codingchallenge.infrastructure.factory;
+package com.aconex.codingchallenge.infrastructure.io;
 
 
+import com.aconex.codingchallenge.infrastructure.io.DictionaryFilePathResolver;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,9 +10,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.io.*;
-
-import static org.junit.Assert.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class DictionaryFilePathResolverTest {
 

@@ -1,8 +1,5 @@
-package com.aconex.codingchallenge.infrastructure;
+package com.aconex.codingchallenge;
 
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 public class Driver {
 

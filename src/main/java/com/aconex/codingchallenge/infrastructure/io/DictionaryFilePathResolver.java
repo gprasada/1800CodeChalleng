@@ -1,4 +1,4 @@
-package com.aconex.codingchallenge.infrastructure.factory;
+package com.aconex.codingchallenge.infrastructure.io;
 
 import java.io.*;
 
