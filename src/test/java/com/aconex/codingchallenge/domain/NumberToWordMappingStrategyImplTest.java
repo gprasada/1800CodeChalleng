@@ -10,10 +10,7 @@ import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.aconex.codingchallenge.domain.Digit.*;
 
@@ -26,6 +23,9 @@ public class NumberToWordMappingStrategyImplTest {
 
     @Mock
     private NumberToWordMappingContext numberToWordMappingContext;
+
+    private Map<String, String> wordToNumberMappingTestData = new HashMap<String, String>();
+    private Digit[] numberToMatch;
 
     @Before
     public void setUp() throws Exception {
@@ -44,14 +44,17 @@ public class NumberToWordMappingStrategyImplTest {
 
         setupTextRepository('C', Arrays.asList("CALL", "COUNTRY","COOL"));
         setupTextRepository('A', Arrays.asList("APPLE", "AMERICA"));
-        setupTextRepository('B', Arrays.asList("BANGALORE", "BEER"));
+        setupTextRepository('B', Arrays.asList("BANGALORE", "BEER", "BALL"));
+
+        wordToNumberMappingTestData.put("CALL", "CALL");
+        wordToNumberMappingTestData.put("BALL", "BALL");
 
     }
 
     private void setupNumberToWordMappingContext(Digit[] number, String word) {
         String response = null;
-        if(word.equals("CALL")) {
-            response = "CALL";
+        if(numberToMatch.equals(number)) {
+            response = wordToNumberMappingTestData.get(word);
         }
         Mockito.when(numberToWordMappingContext.getMappedNumber()).thenReturn(response);
     }
@@ -64,8 +67,9 @@ public class NumberToWordMappingStrategyImplTest {
 
     @Test
     public void testMatchNumbersToText() throws Exception {
-        Set<String> matchedText = numberToTextMappingStrategy.matchNumbersToWord(new Digit[]{DIGIT_2, DIGIT_2, DIGIT_5, DIGIT_5});
-        Assert.assertEquals(1, matchedText.size());
+        numberToMatch = new Digit[]{DIGIT_2, DIGIT_2, DIGIT_5, DIGIT_5};
+        Set<String> matchedText = numberToTextMappingStrategy.matchNumbersToWord(numberToMatch);
+        Assert.assertEquals(2, matchedText.size());
         Assert.assertTrue(matchedText.contains("CALL"));
     }
 

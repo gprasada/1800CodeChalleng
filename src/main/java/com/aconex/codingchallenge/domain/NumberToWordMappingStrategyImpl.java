@@ -1,5 +1,6 @@
 package com.aconex.codingchallenge.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class NumberToWordMappingStrategyImpl implements NumberToWordMappingStrategy {
@@ -9,22 +10,26 @@ public class NumberToWordMappingStrategyImpl implements NumberToWordMappingStrat
     @Override
     public Set<String> matchNumbersToWord(Digit[] digits) {
         char[] mappedCharacters = digits[0].getMappedCharacters();
+        Set<String> allMappedNumbers = new HashSet<String>();
         for (char mappedCharacter : mappedCharacters) {
             Set<String> mappedNumbers = getNumbersAsText(mappedCharacter, digits);
-
+            allMappedNumbers.addAll(mappedNumbers);
         }
 
 
-        return null;
+        return allMappedNumbers;
     }
 
     private Set<String> getNumbersAsText(char mappedCharacter, Digit[] digits) {
         Set<String> dictionaryWords = textRepository.getTextSet(mappedCharacter);
+        Set<String> mappedNumbers = new HashSet<String>();
         for (String word : dictionaryWords) {
             String mappedNumber = createNumberToWordMappingStrategy(digits, word).getMappedNumber();
-            System.out.println("Mapped number "+mappedNumber);
+            if(mappedNumber != null) {
+                mappedNumbers.add(mappedNumber);
+            }
         }
-        return null;
+        return mappedNumbers;
     }
 
     public void setTextRepository(TextRepository textRepository) {
