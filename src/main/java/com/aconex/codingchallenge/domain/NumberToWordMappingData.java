@@ -1,65 +1,64 @@
 package com.aconex.codingchallenge.domain;
 
-public class NumberToWordMappingContext {
+public class NumberToWordMappingData {
 
     protected Digit[] number;
     protected String word;
 
     private StringBuilder sb = new StringBuilder();
-    private boolean stopMapping;
-    private String msg;
+    private boolean stopMatching;
     private int index = 0;
 
-    public NumberToWordMappingContext(Digit[] number, String word) {
+    public NumberToWordMappingData(Digit[] number, String word) {
         this.number = number;
         this.word = word;
-        mapNumberToWord(number, word);
+        matchNumberToWord(number, word);
     }
 
-    private void mapNumberToWord(Digit[] number, String word) {
+    private void matchNumberToWord(Digit[] number, String word) {
         char[] wordChar = word.toCharArray();
         validateWordLength(number, wordChar);
-        if(stopMapping) {
+        if(stopMatching) {
             return;
         }
-        mapNumberToWord(number, wordChar);
-        stopMapping = true;
+        matchNumberToWord(number, wordChar);
     }
 
-    private void mapNumberToWord(Digit[] number, char[] wordChar) {
-        for (int i = 0; i < wordChar.length && !stopMapping; i++) {
-            mapDigitToChar(number[i], wordChar[i]);
+    private void matchNumberToWord(Digit[] number, char[] wordChar) {
+        for (int i = 0; i < wordChar.length && !stopMatching; i++) {
+            matchDigitToChar(number[i], wordChar[i]);
         }
     }
 
-    private void mapDigitToChar(Digit digit, char c) {
+    private void matchDigitToChar(Digit digit, char c) {
         if( digit.isCharMappedToDigit(c) ){
             sb.append(c);
             index++;
         } else {
-            stopMapping = true;
-            msg = "Number and Word do not match";
-            sb = null;
+            stopMatching = true;
+            sb = new StringBuilder();
         }
     }
 
     private void validateWordLength(Digit[] number, char[] wordChar) {
         if(wordChar.length > number.length) {
-            stopMapping = true;
-            msg = "Word is longer than Number";
+            stopMatching = true;
         }
     }
 
     public boolean done() {
-        return stopMapping;
+        return  stopMatching ? stopMatching : !matchMoreWords();
     }
 
-    public String getMsg() {
-        return msg;
+    private boolean matchMoreWords() {
+        if(number.length > index) {
+            return true;
+        }
+        return false;
     }
 
     public String getMappedNumber() {
-        return msg == null? getFullNumber() : null;
+        return sb.length() > 0 ? getFullNumber() : null;
     }
 
     private String getFullNumber() {

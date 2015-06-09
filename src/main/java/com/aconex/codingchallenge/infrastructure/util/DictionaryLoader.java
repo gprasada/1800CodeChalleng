@@ -5,6 +5,7 @@ import com.aconex.codingchallenge.infrastructure.io.FileReader;
 import com.aconex.codingchallenge.infrastructure.io.FileReaderCallBackInterace;
 
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 public class DictionaryLoader {
 

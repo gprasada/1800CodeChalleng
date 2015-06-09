@@ -1,5 +1,6 @@
 package com.aconex.codingchallenge.domain;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,35 +10,52 @@ public class NumberToWordMappingStrategyImpl implements NumberToWordMappingStrat
 
     @Override
     public Set<String> matchNumbersToWord(Digit[] digits) {
-        char[] mappedCharacters = digits[0].getMappedCharacters();
-        Set<String> allMappedNumbers = new HashSet<String>();
-        for (char mappedCharacter : mappedCharacters) {
-            Set<String> mappedNumbers = getNumbersAsText(mappedCharacter, digits);
-            allMappedNumbers.addAll(mappedNumbers);
+        if(digits == null || digits.length == 0) {
+            return Collections.EMPTY_SET;
         }
+        return matchNumbersWithWordsInRepo(digits);
+    }
 
-
-        return allMappedNumbers;
+    private Set<String> matchNumbersWithWordsInRepo(Digit[] digits) {
+        char[] charactersMappedToDigit = digits[0].getMappedCharacters();
+        Set<String> matchResults = new HashSet<String>();
+        for (char mappedCharacter : charactersMappedToDigit) {
+            Set<String> mappedNumbers = getNumbersAsText(mappedCharacter, digits);
+            matchResults.addAll(mappedNumbers);
+        }
+        return matchResults;
     }
 
     private Set<String> getNumbersAsText(char mappedCharacter, Digit[] digits) {
         Set<String> dictionaryWords = textRepository.getTextSet(mappedCharacter);
-        Set<String> mappedNumbers = new HashSet<String>();
+        Set<String> matches = new HashSet<String>();
         for (String word : dictionaryWords) {
-            String mappedNumber = createNumberToWordMappingStrategy(digits, word).getMappedNumber();
-            if(mappedNumber != null) {
-                mappedNumbers.add(mappedNumber);
-            }
+            NumberToWordMappingData numberToWordMappingData = createNumberToWordMappingData(digits, word);
+            Set<String> matchSet = getMatches(numberToWordMappingData);
+            matches.addAll(matchSet);
         }
-        return mappedNumbers;
+        return matches;
+    }
+
+    private Set<String> getMatches(NumberToWordMappingData numberToWordMappingData) {
+        Set<String> matches = new HashSet<String>();
+        String match = numberToWordMappingData.getMappedNumber();
+        addMappedNumbers(matches, match);
+        return matches;
+    }
+
+    private void addMappedNumbers(Set<String> matches, String match) {
+        if(match != null) {
+            matches.add(match);
+        }
     }
 
     public void setTextRepository(TextRepository textRepository) {
         this.textRepository = textRepository;
     }
 
-    protected NumberToWordMappingContext createNumberToWordMappingStrategy(Digit[] number, String word) {
-        return new NumberToWordMappingContext(number, word);
+    protected NumberToWordMappingData createNumberToWordMappingData(Digit[] number, String word) {
+        return new NumberToWordMappingData(number, word);
     }
 
 }

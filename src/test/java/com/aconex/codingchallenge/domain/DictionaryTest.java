@@ -7,9 +7,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
+import static com.aconex.codingchallenge.domain.Digit.*;
 
 public class DictionaryTest {
 
@@ -21,13 +22,16 @@ public class DictionaryTest {
     @Mock
     private TextFormatter textFormatter;
 
+    @Mock
+    private NumberToWordMappingStrategy numberToWordMappingStratergy;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         dictionary = new Dictionary();
         dictionary.setTextRepository(textRepository);
         dictionary.setTextFormatter(textFormatter);
-
+        dictionary.setNumberToWordMappingStrategy(numberToWordMappingStratergy);
     }
 
     @Test
@@ -36,6 +40,17 @@ public class DictionaryTest {
         Mockito.when(textFormatter.format(word)).thenReturn("HELLO");
         dictionary.addWord(word);
         Mockito.verify(textRepository).addText("HELLO");
+    }
+
+    @Test
+    public void testMatchNumbersToWord() {
+        Digit[] digits = new Digit[] {Digit.DIGIT_2, Digit.DIGIT_2};
+        List<String> strings = Arrays.asList("HI", "HO");
+        Set<String> matches = new HashSet<String>(strings);
+        Set<String> unmodifiableSet = Collections.unmodifiableSet(matches);
+        Mockito.when(numberToWordMappingStratergy.matchNumbersToWord(digits)).thenReturn(unmodifiableSet);
+        Set<String> matchedWords = dictionary.matchNumbersToWord(digits);
+        Assert.assertSame(unmodifiableSet, matchedWords);
 
     }
 

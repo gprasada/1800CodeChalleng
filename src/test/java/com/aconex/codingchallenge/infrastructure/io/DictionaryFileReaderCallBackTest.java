@@ -7,11 +7,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.*;
+public class DictionaryFileReaderCallBackTest {
 
-public class DictionaryLoaderFileReaderCallBackTest {
-
-    private DictionaryLoaderFileReaderCallBack dictionaryLoaderFileReaderCallBack;
+    private DictionaryFileReaderCallBack dictionaryFileReaderCallBack;
 
     @Mock
     private Dictionary dictionary;
@@ -19,14 +17,14 @@ public class DictionaryLoaderFileReaderCallBackTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        dictionaryLoaderFileReaderCallBack = new DictionaryLoaderFileReaderCallBack();
-        dictionaryLoaderFileReaderCallBack.setDictionary(dictionary);
+        dictionaryFileReaderCallBack = new DictionaryFileReaderCallBack();
+        dictionaryFileReaderCallBack.setDictionary(dictionary);
     }
 
     @Test
     public void testNewLine() throws Exception {
-        dictionaryLoaderFileReaderCallBack.newLine("HELLO");
-        dictionaryLoaderFileReaderCallBack.newLine("WORLD");
+        dictionaryFileReaderCallBack.newLine("HELLO");
+        dictionaryFileReaderCallBack.newLine("WORLD");
         Mockito.verify(dictionary).addWord("HELLO");
         Mockito.verify(dictionary).addWord("WORLD");
         Mockito.verifyNoMoreInteractions(dictionary);

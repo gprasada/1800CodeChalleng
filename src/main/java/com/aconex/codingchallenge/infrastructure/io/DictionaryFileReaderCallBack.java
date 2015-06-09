@@ -2,7 +2,7 @@ package com.aconex.codingchallenge.infrastructure.io;
 
 import com.aconex.codingchallenge.domain.Dictionary;
 
-public class DictionaryLoaderFileReaderCallBack implements FileReaderCallBackInterace {
+public class DictionaryFileReaderCallBack implements FileReaderCallBackInterace {
 
     private Dictionary dictionary;
 

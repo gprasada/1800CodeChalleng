@@ -1,29 +1,25 @@
 package com.aconex.codingchallenge.infrastructure.io;
 
+import com.aconex.codingchallenge.infrastructure.factory.InputStreamFactory;
+
 import java.io.*;
+import java.util.logging.Logger;
 
 public class DictionaryFilePathResolver {
 
+    private InputStreamFactory inputStreamFactory;
+
+    private static final Logger LOGGER = Logger.getLogger(DictionaryFilePathResolver.class.getName());
+
     public InputStream getDictionaryFileInputStream() {
         String dictionaryFilePath = System.getProperty("DictionaryFilePath");
+        LOGGER.info("System Property DictionaryFilePath set to "+dictionaryFilePath);
         if(dictionaryFilePath != null) {
-            return getInputStreamToExternalFile(dictionaryFilePath);
+            return inputStreamFactory.createInputStream(dictionaryFilePath);
         } else {
+            LOGGER.info("Loading default dictionary file dictionary.txt from classpath");
             return getInputStreamToDefaultFile();
         }
-    }
-
-    private InputStream getInputStreamToExternalFile(String dictionaryFilePath) {
-        File file = new File(dictionaryFilePath);
-        try {
-            return getInputStreamToExternalFile(file);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("Dictionary File not found ", e);
-        }
-    }
-
-    protected InputStream getInputStreamToExternalFile(File file) throws FileNotFoundException {
-            return new FileInputStream(file);
     }
 
     private InputStream getInputStreamToDefaultFile() {
@@ -34,5 +30,7 @@ public class DictionaryFilePathResolver {
         return getClass().getClassLoader();
     }
 
-
+    public void setInputStreamFactory(InputStreamFactory inputStreamFactory) {
+        this.inputStreamFactory = inputStreamFactory;
+    }
 }
